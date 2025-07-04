@@ -1,8 +1,8 @@
 # Device Registry API
 
-This is a Ruby on Rails API for managing device assignments to users, built as a technical assignment.
+A Ruby on Rails API for managing device assignments to users, built as a technical assignment.
 
-The API provides endpoints for assigning a device to a user and returning it, with business logic encapsulated in service objects and fully covered by tests.
+It provides endpoints to assign/unassign devices to/from users. Business logic is encapsulated in service objects, and the project is fully covered by tests.
 
 ---
 
@@ -15,45 +15,56 @@ The API provides endpoints for assigning a device to a user and returning it, wi
 
 ---
 
-## 🚀 Setup and Verification
+## 🚀 Setup & Verification
 
-To ensure the project is set up correctly, please follow these steps precisely. These instructions are designed to meet all the verification requirements mentioned in the assignment.
+Follow these steps to set up the project locally.
 
-### 1. Set Ruby Version (Optional, if do not have Ruby installed)
+The project was tested with Arch Linux. It should also work on other Linux distributions if you have the necessary dependencies installed and PATH is set up correctly for rbenv or RVM.
 
-This project is built and tested with Ruby 3.2.3.
+### 1. Install Ruby (if needed)
+
+The project uses Ruby **3.2.3**.
 
 ```bash
-# Example with rbenv
+# Using rbenv (example)
 rbenv install 3.2.3
 rbenv global 3.2.3
 ```
+
+You may also want to add rbenv to your fish or zsh or sh configuration.
+
+```bash
+# Fish example
+set -gx PATH $HOME/.rbenv/bin $PATH
+status --is-interactive; and source (rbenv init -|psub)
+```
+
+You can also use [RVM](https://rvm.io/) instead.
 
 ### 2. Clone the Repository
 
 ```bash
 git clone https://github.com/DrArzter/device_registry
+cd device_registry
 ```
 
 ### 3. Install Dependencies
 
 ```bash
-cd device_registry
 bundle install
 ```
 
-### 4. Update Shell Command Shims (Optional)
+### 4. Update Shell Shims (if using rbenv)
 
-To ensure that the new gems are available in your `PATH`, run the following command:
+Ensures your shell recognizes installed binaries:
 
 ```bash
-# If using rbenv
 rbenv rehash
 ```
 
-> **Note for RVM users:** This step is not necessary, as `rvm` handles this automatically.
+> 💡 **Note for RVM users:** This step is not needed.
 
-### 5. Create and Prepare the Database
+### 5. Set Up the Database
 
 ```bash
 rails db:create
@@ -61,22 +72,19 @@ rails db:migrate
 rake db:test:prepare
 ```
 
-> **Note:** The `rake db:test:prepare` command is included to meet an explicit requirement of the assignment.  
-> In modern Rails, this step is typically handled automatically by RSpec's configuration.
-
-
+> 📌 `rake db:test:prepare` is explicitly required by the assignment, even though modern Rails handles test DB setup automatically via RSpec.
 
 ---
 
 ## ✅ Running the Test Suite
 
-After a successful setup, run the test suite:
+To verify the setup and run tests:
 
 ```bash
 rspec spec
 ```
 
-**Recommended for development:**
+**Recommended:**
 
 ```bash
 bundle exec rspec
@@ -86,33 +94,45 @@ bundle exec rspec
 
 ## 📡 API Usage Examples
 
-All endpoints require an `Authorization: Bearer <token>` header. You can create a test user and an API key from the Rails console.
+All endpoints require an `Authorization: Bearer <token>` header. You can create a test user and API key using the Rails console.
 
-### 1. Start Rails Console
+### 1. Open Rails Console
 
 ```bash
 rails c
 ```
 
-### 2. Create a Test User
+### 2. Prepare Test Data
+
+Run the following in the console to create a user, a device, and an API key:
 
 ```ruby
 user = User.create!(email: 'test@example.com', password: 'password123')
-```
-
-### 3. Create a Device
-
-```ruby
 device = Device.create!(serial_number: 'SN-TEST-001')
-```
-
-### 4. Create an API Key for the User
-
-```ruby
 api_key = ApiKey.create!(bearer: user)
+
+puts "---"
+puts "✅ Setup Complete! Use these values for API testing:"
+puts "API TOKEN (copy this): #{api_key.token}"
+puts "Device Serial Number: #{device.serial_number}"
+puts "---"
 ```
 
-### 5. Assign the Device to the User
+### 3. Start the Server
+
+In a separate terminal:
+
+```bash
+rails s
+```
+
+### 4. Test the API with `curl`
+
+> 📌 Use the token from the console output above.
+
+In a separate terminal:
+
+#### 4.1 Assign a Device
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/devices/assign \
@@ -121,7 +141,7 @@ curl -X POST http://localhost:3000/api/v1/devices/assign \
      -d '{ "device": { "serial_number": "SN-TEST-001" } }'
 ```
 
-### 6. Unassign the Device from the User
+#### 4.2 Unassign a Device
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/devices/unassign \
@@ -130,6 +150,5 @@ curl -X POST http://localhost:3000/api/v1/devices/unassign \
      -d '{ "device": { "serial_number": "SN-TEST-001" } }'
 ```
 
-> **Reminder:** Make sure to run `rails s` in a separate terminal to start the server when testing the API with `curl`.
-
 ---
+
