@@ -1,24 +1,133 @@
-# README
+# Device Registry API
 
-Your task is to implement the part of the application that helps track devices assigned to users within an organization.
+This is a Ruby on Rails API for managing device assignments to users, built as a technical assignment.
 
-For now, we have two ActiveRecord models: User and Device.
-User can have many devices; the device should be active only for one assigned user.
-There are 2 actions a User can take with the Device: assign the device to User or return the Device.
+The API provides endpoints for assigning a device to a user and returning it, with business logic encapsulated in service objects and fully covered by tests.
 
-Here are the product requirements:
-- User can assign the device only to themself. 
-- User can't assign the device already assigned to another user.
-- Only the user who assigned the device can return it. 
-- If the user returned the device in the past, they can't ever re-assign the same device to themself.
+---
 
+## ⚙️ Technical Stack
 
-TODO:
- - Clone this repo to your local machine - DON'T FORK IT.
- - Fix the config, so you can run the test suite properly.
- - Implement the code to make the tests pass for `AssignDeviceToUser` service.
- - Following the product requirements listed above, implement tests for returning the device and then implement the code to make them pass.
- - In case you are missing additional product requirements, use your best judgment. Have fun with it.
- - Refactor at will. Do you see something you don't like? Change it. It's your code. Remember to satisfy the outlined product requirements though.
- - Remember to document your progress using granular commits and meaningful commit messages.
- - Publish your code as a public repo using your Github account.
+- **Ruby:** 3.2.3  
+- **Rails:** 7.1.3 (API-only mode)  
+- **Database:** SQLite3  
+- **Testing:** RSpec, FactoryBot, DatabaseCleaner  
+
+---
+
+## 🚀 Setup and Verification
+
+To ensure the project is set up correctly, please follow these steps precisely. These instructions are designed to meet all the verification requirements mentioned in the assignment.
+
+### 1. Set Ruby Version
+
+This project is built and tested with Ruby 3.2.3.
+
+```bash
+# Example with rbenv
+rbenv install 3.2.3
+rbenv global 3.2.3
+```
+
+### 2. Clone the Repository
+
+```bash
+git clone https://github.com/DrArzter/device_registry
+```
+
+### 3. Install Dependencies
+
+```bash
+cd device_registry
+bundle install
+```
+
+### 4. Create and Prepare the Database
+
+```bash
+rails db:create
+rails db:migrate
+rake db:test:prepare
+```
+
+> **Note:** The `rake db:test:prepare` command is included to meet an explicit requirement of the assignment.  
+> In modern Rails, this step is typically handled automatically by RSpec's configuration.
+
+### 5. Update Shell Command Shims
+
+To ensure that the `rspec` command is available in your `PATH`, run the following command:
+
+```bash
+# If using rbenv
+rbenv rehash
+```
+
+> **Note for RVM users:** This step is not necessary, as `rvm` handles this automatically.
+
+---
+
+## ✅ Running the Test Suite
+
+After a successful setup, run the test suite:
+
+```bash
+rspec spec
+```
+
+**Recommended for development:**
+
+```bash
+bundle exec rspec
+```
+
+---
+
+## 📡 API Usage Examples
+
+All endpoints require an `Authorization: Bearer <token>` header. You can create a test user and an API key from the Rails console.
+
+### 1. Start Rails Console
+
+```bash
+rails c
+```
+
+### 2. Create a Test User
+
+```ruby
+user = User.create!(email: 'test@example.com', password: 'password123')
+```
+
+### 3. Create a Device
+
+```ruby
+device = Device.create!(serial_number: 'SN-TEST-001')
+```
+
+### 4. Create an API Key for the User
+
+```ruby
+api_key = ApiKey.create!(bearer: user)
+```
+
+### 5. Assign the Device to the User
+
+```bash
+curl -X POST http://localhost:3000/api/v1/devices/assign \
+     -H "Authorization: Bearer <your_token>" \
+     -H "Content-Type: application/json" \
+     -d '{ "device": { "serial_number": "SN-TEST-001" } }'
+```
+
+### 6. Unassign the Device from the User
+
+```bash
+curl -X POST http://localhost:3000/api/v1/devices/unassign \
+     -H "Authorization: Bearer <your_token>" \
+     -H "Content-Type: application/json" \
+     -d '{ "device": { "serial_number": "SN-TEST-001" } }'
+```
+
+> **Reminder:** Make sure to run `rails s` in a separate terminal to start the server when testing the API with `curl`.
+
+---
