@@ -3,3 +3,6 @@
 
 /log/*
 !/log/.keep
+
+/storage/*
+!/storage/.keep
