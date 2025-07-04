@@ -19,7 +19,7 @@ The API provides endpoints for assigning a device to a user and returning it, wi
 
 To ensure the project is set up correctly, please follow these steps precisely. These instructions are designed to meet all the verification requirements mentioned in the assignment.
 
-### 1. Set Ruby Version
+### 1. Set Ruby Version (Optional, if do not have Ruby installed)
 
 This project is built and tested with Ruby 3.2.3.
 
@@ -42,7 +42,18 @@ cd device_registry
 bundle install
 ```
 
-### 4. Create and Prepare the Database
+### 4. Update Shell Command Shims (Optional)
+
+To ensure that the new gems are available in your `PATH`, run the following command:
+
+```bash
+# If using rbenv
+rbenv rehash
+```
+
+> **Note for RVM users:** This step is not necessary, as `rvm` handles this automatically.
+
+### 5. Create and Prepare the Database
 
 ```bash
 rails db:create
@@ -53,16 +64,7 @@ rake db:test:prepare
 > **Note:** The `rake db:test:prepare` command is included to meet an explicit requirement of the assignment.  
 > In modern Rails, this step is typically handled automatically by RSpec's configuration.
 
-### 5. Update Shell Command Shims
 
-To ensure that the `rspec` command is available in your `PATH`, run the following command:
-
-```bash
-# If using rbenv
-rbenv rehash
-```
-
-> **Note for RVM users:** This step is not necessary, as `rvm` handles this automatically.
 
 ---
 
