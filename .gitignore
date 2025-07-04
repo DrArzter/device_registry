@@ -6,3 +6,6 @@
 
 /storage/*
 !/storage/.keep
+
+/vendor/bundle
+/.bundle
