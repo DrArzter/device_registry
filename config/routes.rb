@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :devices, only: [] do
-        post :assgn
-        post :unassign
+        post :assign, on: :collection
+        post :unassign, on: :collection
       end
     end
   end
