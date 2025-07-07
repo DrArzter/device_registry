@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   has_many :api_keys, as: :bearer
-  has_secure_password
+  # has_secure_password
 
   # When a user is destroyed, all of their assigned devices are also destroyed
   has_many :device_assignments, dependent: :destroy
