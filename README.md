@@ -134,6 +134,8 @@ In a separate terminal:
 
 #### 4.1 Assign a Device
 
+You can assign a device using the following command:
+
 ```bash
 curl -X POST http://localhost:3000/api/v1/devices/assign \
      -H "Authorization: Bearer <your_token>" \
@@ -143,11 +145,33 @@ curl -X POST http://localhost:3000/api/v1/devices/assign \
 
 #### 4.2 Unassign a Device
 
+You can unassign a device using the following command:
+
 ```bash
 curl -X POST http://localhost:3000/api/v1/devices/unassign \
      -H "Authorization: Bearer <your_token>" \
      -H "Content-Type: application/json" \
      -d '{ "device": { "serial_number": "SN-TEST-001" } }'
+```
+
+#### 4.3 Register a New User
+
+You can register a **new user** using the following command:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/users \
+     -H "Content-Type: application/json" \
+     -d '{ "user": { "email": "new_user@example.com", "password": "securepassword", "password_confirmation": "securepassword" } }'
+```
+
+#### 4.4 Login with an Existing User
+
+After registering a **new user**, you can log in using the following command:
+
+```bash
+curl -X POST http://localhost:3000/api/v1/login \
+     -H "Content-Type: application/json" \
+     -d '{ "email": "test@example.com", "password": "password123" }'
 ```
 
 ---
